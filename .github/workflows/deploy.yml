@@ -1,4 +1,4 @@
-name: Ubuntu + Docker 自动部署
+name: 自动部署（国内服务器极速版）
 
 on:
   push:
@@ -8,9 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: 连接服务器并更新部署
+      - name: 连接服务器并自动更新
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -18,8 +16,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /root/sensitive-api
+            cd /root/our-tools
             git pull origin main
             docker compose down
-            docker compose build --no-cache
-            docker compose up -d
+            docker compose up -d --build
